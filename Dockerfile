@@ -7,17 +7,19 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # System deps (optional, for pandas)
-RUN apt-get update && apt-get install -y --no-install-recommends         build-essential     && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first (enable layer cache)
-COPY requirements.txt ./
+COPY requirements.txt ./ 
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy app sources
 COPY src ./src
 
-# Copy default model (can be replaced at runtime via volume or /api/train)
-COPY model.pkl ./model.pkl
+# Copy artifacts (modelo entrenado)
+COPY artifacts ./artifacts
 
 # (Optional) Copy data directory if present
 # COPY data ./data
@@ -26,7 +28,7 @@ COPY model.pkl ./model.pkl
 EXPOSE 8080
 
 # Default model path
-ENV MODEL_PATH=/app/model.pkl
+ENV MODEL_PATH=/app/artifacts/model.pkl
 
 # Start the API
 CMD ["python", "-m", "src.main"]
