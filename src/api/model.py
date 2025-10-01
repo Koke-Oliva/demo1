@@ -7,7 +7,7 @@ import os
 import joblib
 import numpy as np
 
-MODEL_PATH = os.getenv("MODEL_PATH", "model.pkl")
+MODEL_PATH = os.getenv("MODEL_PATH", "artifacts/model.pkl")
 
 _model = None
 
